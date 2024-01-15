@@ -24,6 +24,13 @@ export default async function Home() {
             <ActionButtons vertical />
           </div>
           <TrackList />
+          <TrackList />
+          <TrackList />
+          <TrackList />
+          <TrackList />
+          <TrackList />
+          <TrackList />
+          <TrackList />
         </div>
       </div>
       <div className="flex w-full justify-end p-4 tracking-tight">

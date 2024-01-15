@@ -11,7 +11,7 @@ const TrackList = () => {
           key={`${track.artist} ${track.name}`}
           className="flex justify-between py-2"
         >
-          <span className="text-red-500">{track.artist}</span>
+          <span className="text-pink-600">{track.artist}</span>
           <span>{track.name}</span>
         </div>
       ))}
