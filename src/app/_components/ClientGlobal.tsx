@@ -5,7 +5,7 @@ import { Toaster } from "./ui/components/ui/sonner";
 export const ClientGlobal = () => {
   return (
     <>
-      <Toaster />
+      <Toaster position="bottom-center" />
     </>
   );
 };

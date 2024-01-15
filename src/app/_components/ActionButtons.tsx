@@ -11,9 +11,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/components/ui/dialog";
-import { useConfigStore } from "../_stores/ConfigStore";
 import { Input } from "./ui/components/ui/input";
 import { Button } from "./ui/components/ui/button";
+import { useConfigStore } from "../_stores/ConfigStore";
+import { api } from "~/trpc/react";
+import Image from "next/image";
 import { toast } from "sonner";
 
 export type ActionButtonsProps = {
@@ -30,22 +32,31 @@ export const ActionButtons = ({ vertical }: ActionButtonsProps) => {
       )}
     >
       <OptionsDialog>
-        <Icon className="size-8" icon={"fluent:settings-16-filled"} />
+        <Icon
+          className="fill-foreground size-8"
+          icon={"fluent:settings-16-filled"}
+        />
       </OptionsDialog>
-      <Icon className="size-8" icon={"fluent:arrow-sync-16-filled"} />
-      <Icon className="size-8" icon={"material-symbols:delete"} />
+      <Icon
+        className="fill-foreground size-8"
+        icon={"fluent:arrow-sync-16-filled"}
+      />
+      <Icon
+        className="fill-foreground size-8"
+        icon={"material-symbols:delete"}
+      />
     </div>
   );
 };
 
 type OptionsDialogProps = PropsWithChildren;
-const OptionsDialog = (props: OptionsDialogProps) => {
-  const { setUsername, username } = useConfigStore();
 
-  const [localUsername, setLocalUsername] = useState(username);
-  const [checkState, setCheckState] = useState<"none" | "checked" | "error">(
-    "error",
-  );
+const OptionsDialog = (props: OptionsDialogProps) => {
+  const { user, setUser } = useConfigStore();
+
+  const [localUsername, setLocalUsername] = useState(user?.name ?? "");
+
+  const uquery = api.user.check.useMutation();
 
   return (
     <Dialog>
@@ -54,43 +65,54 @@ const OptionsDialog = (props: OptionsDialogProps) => {
         <DialogHeader>
           <DialogTitle>Settings</DialogTitle>
         </DialogHeader>
-        <div className="flex gap-x-2">
-          <Input
-            placeholder="last.fm"
-            value={localUsername}
-            onChange={(e) => setLocalUsername(e.currentTarget.value)}
-          />
-          <Button
-            variant={
-              (checkState === "none" && "ghost") ||
-              (checkState === "error" && "destructive") ||
-              "ghost"
-            }
-            onClick={() => {
-              toast(":3 YIPPIE!!!!");
-              setUsername(localUsername);
-            }}
-          >
-            {
-              {
-                checked: (
-                  <Icon
-                    icon={"fluent:checkmark-16-filled"}
-                    className="size-6"
-                  />
-                ),
-                error: (
-                  <Icon
-                    icon={"fluent:add-16-filled"}
-                    className="size-6 rotate-45"
-                  />
-                ),
-                none: "Check",
-              }[checkState]
-            }
-            {/* <Icon icon={"material-symbols:delete"} /> */}
-          </Button>
-        </div>
+
+        {!user && (
+          <div className="flex gap-x-2">
+            <Input
+              placeholder="last.fm username"
+              value={localUsername}
+              onChange={(e) => setLocalUsername(e.currentTarget.value)}
+            />
+            <Button
+              variant={"outline"}
+              onClick={async () => {
+                const user = await uquery
+                  .mutateAsync({
+                    username: localUsername,
+                  })
+                  .catch((e) => {
+                    throw e;
+                  });
+
+                setUser(user);
+              }}
+            >
+              Search
+            </Button>
+          </div>
+        )}
+        {user && (
+          <>
+            <div className="ring-muted flex min-h-[4rem] items-center gap-x-2 rounded-md p-2 ring-1">
+              <Image
+                className="size-12"
+                src={user.image.at(0)?.["#text"] ?? ""}
+                alt={`${user.name} Profile picture`}
+                width={400}
+                height={400}
+              />
+              <div>{user.name}</div>
+            </div>
+            <Button
+              variant={"outline"}
+              onClick={() => {
+                setUser(null);
+              }}
+            >
+              Clear
+            </Button>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

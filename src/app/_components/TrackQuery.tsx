@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "./ui/components/ui/popover";
-import type { LASTFM_Track } from "../lib/validators";
 import { useTrackStore } from "../_stores/TrackStore";
 import { api } from "~/trpc/react";
+import { Input } from "./ui/components/ui/input";
 
 export const TrackQuery = () => {
   const timeout = useRef<NodeJS.Timeout>();
@@ -16,14 +16,19 @@ export const TrackQuery = () => {
   const [query, setQuery] = useState("");
   const addTrack = useTrackStore((s) => s.addTrack);
 
-  const { data } = api.tracks.search.useQuery({ query });
+  const { data } = api.tracks.search.useQuery(
+    { query },
+    {
+      enabled: !!query,
+    },
+  );
 
   return (
     <div className="flex w-full flex-col py-4">
       <Popover>
-        <input
-          className="placeholder:text-dark bg-dark-background-dimmed w-full p-2"
-          placeholder="search"
+        <Input
+          className="w-full p-2"
+          placeholder="Add Track"
           onChange={(e) => {
             if (timeout.current) {
               clearTimeout(timeout.current);
@@ -36,9 +41,6 @@ export const TrackQuery = () => {
             }, 200);
           }}
         />
-        <PopoverTrigger>
-          <div>OPEN</div>
-        </PopoverTrigger>
         <PopoverContent>
           {data?.map((track) => (
             <div

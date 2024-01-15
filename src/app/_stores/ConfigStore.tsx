@@ -1,21 +1,22 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { LASTFM_User } from "../lib/validators";
 
 export interface TrackStore {
-  username: string;
-  setUsername: (v: string) => void;
+  user: LASTFM_User | null;
+  setUser: (user: LASTFM_User | null) => void;
 }
 
 const useConfigStore = create<TrackStore>()(
   persist(
     (set) => ({
-      username: "",
-      setUsername: (v: string) => set({ username: v }),
+      user: null,
+      setUser: (v) => set({ user: v }),
     }),
     {
-      name: "configstore",
+      name: "userStore",
       partialize: (s) => ({
-        username: s.username,
+        user: s.user,
       }),
     },
   ),

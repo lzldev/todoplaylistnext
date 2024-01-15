@@ -9,6 +9,16 @@ const config = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "lastfm.freetls.fastly.net",
+        port: "",
+        pathname: "/i/u/*/**",
+      },
+    ],
+  },
 };
 
 export default config;

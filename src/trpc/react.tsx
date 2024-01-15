@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import { type AppRouter } from "~/server/api/root";
 import { getUrl, transformer } from "./shared";
+import { toast } from "sonner";
 
 export const api = createTRPCReact<AppRouter>();
 
@@ -18,6 +19,20 @@ export function TRPCReactProvider(props: {
     () =>
       new QueryClient({
         defaultOptions: {
+          mutations: {
+            onError(error, variables, context) {
+              if (
+                error &&
+                typeof error === "object" &&
+                "message" in error &&
+                typeof error.message === "string"
+              ) {
+                toast.error(error.message);
+              }
+            },
+
+            retry: false,
+          },
           queries: {
             retry: false,
             refetchInterval: false,

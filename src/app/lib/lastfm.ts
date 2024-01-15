@@ -1,4 +1,16 @@
 import { env } from "~/env";
+import { encode } from "querystring";
 
-export const LASTFM_API_TrackQueryURL = (query: string, page?: number) =>
-  `https://ws.audioscrobbler.com/2.0/?method=track.search&api_key=${env.LASTFM_KEY}&page=${page ?? 0}&track="${query}"&format=json`;
+const defaults = `?${encode({
+  api_key: env.LASTFM_KEY,
+  format: "json",
+})}&`;
+
+export const LASTFM_API_TrackQueryURL = (track: string, page?: number) =>
+  `https://ws.audioscrobbler.com/2.0/${defaults}${encode({ method: "track.search", track, page })}`;
+
+export const LASTFM_API_GetUserInfo = (user: string) =>
+  `https://ws.audioscrobbler.com/2.0/${defaults}${encode({ method: "user.getinfo", user })}`;
+
+export const LASTFM_API_GetRecentTracks = (user: string) =>
+  `https://ws.audioscrobbler.com/2.0/${defaults}${encode({ method: "user.getrecenttracks", user })}`;
