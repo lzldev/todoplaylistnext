@@ -1,4 +1,4 @@
-import type { LASTFM_Track } from "../lib/validators";
+import type { LASTFM_Track } from "../../server/lib/validators";
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { LASTFM_User } from "../lib/validators";
+import type { LASTFM_User } from "../../server/lib/validators";
 
 export interface TrackStore {
   user: LASTFM_User | null;

@@ -1,9 +1,8 @@
-import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { LASTFM_API_TrackQueryURL } from "~/app/lib/lastfm";
-import { LASTFM_TrackQueryResponseParser } from "~/app/lib/validators";
-
+import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { LASTFM_API_TrackQueryURL } from "~/server/lib/lastfm";
+import { LASTFM_TrackQueryResponseParser } from "~/server/lib/validators";
 
 export const trackRouter = createTRPCRouter({
   search: publicProcedure
@@ -31,6 +30,10 @@ export const trackRouter = createTRPCRouter({
       });
 
       const result = LASTFM_TrackQueryResponseParser.parse(data);
+
+      if ("error" in result) {
+        throw result;
+      }
 
       return result.results.trackmatches.track;
     }),

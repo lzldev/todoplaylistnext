@@ -1,12 +1,8 @@
-import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { LASTFM_API_GetUserInfo } from "~/app/lib/lastfm";
-import {
-  LASTFM_ErrorParser,
-  LASTFM_UserInfoQueryResponseParser,
-} from "~/app/lib/validators";
-
+import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { LASTFM_API_GetUserInfo } from "~/server/lib/lastfm";
+import { LASTFM_UserInfoQueryResponseParser } from "~/server/lib/validators";
 
 export const userRouter = createTRPCRouter({
   check: publicProcedure
@@ -64,20 +60,11 @@ export const userRouter = createTRPCRouter({
         });
       });
 
-      console.log(data);
-
-      const prs = z.union([
-        LASTFM_UserInfoQueryResponseParser,
-        LASTFM_ErrorParser,
-      ]);
-
-      const d2 = prs.parse(data);
-
-      if ("error" in d2) {
-        throw d2;
-      }
-
       const result = LASTFM_UserInfoQueryResponseParser.parse(data);
+
+      if ("error" in result) {
+        throw result;
+      }
 
       return result.user;
     }),

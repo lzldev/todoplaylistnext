@@ -12,7 +12,7 @@ const TrackList = () => {
         <div
           key={idx}
           tabIndex={0}
-          className="flex justify-between gap-x-2 p-2 first:mt-2"
+          className="flex justify-between gap-x-4 p-2 first:mt-2"
           role="article"
         >
           <div>
@@ -31,7 +31,7 @@ const TrackList = () => {
             </div>
             <div className="flex flex-row-reverse">
               <span className="text-sm tracking-tight text-muted-foreground">
-                added {track.create_at.toString()}
+                added {track.create_at instanceof Date ? "true" : "false"}
               </span>
             </div>
           </div>
