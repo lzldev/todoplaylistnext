@@ -31,23 +31,25 @@ export const ActionButtons = ({ vertical }: ActionButtonsProps) => {
       )}
     >
       <OptionsDialog>
-        <Icon
-          className="fill-foreground size-8"
-          icon={"fluent:settings-16-filled"}
-        />
+        <Button variant={"ghost"}>
+          <Icon
+            className="size-8 fill-foreground"
+            icon={"fluent:settings-16-filled"}
+          />
+        </Button>
       </OptionsDialog>
-      <button>
+      <Button variant={"ghost"}>
         <Icon
-          className="fill-foreground size-8"
+          className="size-8 fill-foreground"
           icon={"fluent:arrow-sync-16-filled"}
         />
-      </button>
-      <button>
+      </Button>
+      <Button variant={"ghost"}>
         <Icon
-          className="fill-foreground size-8"
+          className="size-8 fill-foreground"
           icon={"material-symbols:delete"}
         />
-      </button>
+      </Button>
     </div>
   );
 };
@@ -63,7 +65,7 @@ const OptionsDialog = (props: OptionsDialogProps) => {
 
   return (
     <Dialog>
-      <DialogTrigger>{props.children}</DialogTrigger>
+      <DialogTrigger asChild>{props.children}</DialogTrigger>
       <DialogContent className="md:max-w-md">
         <DialogHeader>
           <DialogTitle>Settings</DialogTitle>
@@ -96,7 +98,7 @@ const OptionsDialog = (props: OptionsDialogProps) => {
         )}
         {user && (
           <>
-            <div className="ring-muted flex min-h-[4rem] items-center gap-x-2 rounded-md p-2 ring-1">
+            <div className="flex min-h-[4rem] items-center gap-x-2 rounded-md p-2 ring-1 ring-muted">
               <Image
                 className="size-12"
                 src={user.image.at(0)?.["#text"] ?? ""}

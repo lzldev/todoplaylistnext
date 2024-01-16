@@ -14,17 +14,22 @@ import { SymbolIcon } from "@radix-ui/react-icons";
 
 export const TrackQuery = () => {
   const timeout = useRef<NodeJS.Timeout>();
-
   const [query, setQuery] = useState("");
-  const addTrack = useTrackStore((s) => s.addTrack);
   const [open, setOpen] = useState(false);
 
-  const { data, isFetching } = api.tracks.search.useQuery(
-    { query },
-    {
-      enabled: !!query,
-    },
-  );
+  const addTrack = useTrackStore((s) => s.addTrack);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const { data, isFetching, hasNextPage, fetchNextPage } =
+    api.tracks.search.useInfiniteQuery(
+      { query },
+      {
+        enabled: !!query,
+        getNextPageParam: (lastPage) => {
+          return lastPage.nextCursor;
+        },
+      },
+    );
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -44,6 +49,7 @@ export const TrackQuery = () => {
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput
+          onSelect={() => ""}
           placeholder="Search"
           onFocus={() => {
             if (!open) {
@@ -58,32 +64,43 @@ export const TrackQuery = () => {
             const v = value;
 
             timeout.current = setTimeout(() => {
-              console.log("updating query to=", v);
               setQuery(v);
             }, 200);
           }}
         />
         <CommandList>
-          {isFetching && (
-            <div className="flex w-full justify-center py-6">
-              <SymbolIcon className="size-6 animate-spin duration-1000" />
-            </div>
-          )}
-          {!isFetching &&
-            data?.map((track, idx) => (
+          {data?.pages.flatMap((page, pIdx, arr) =>
+            page.tracks.map((track, idx) => (
               <CommandItem
-                key={`${track.artist} ${track.name}`}
-                tabIndex={idx}
+                key={`${track.url}`}
                 className="flex items-center justify-between"
                 onSelect={() => addTrack(track)}
-                value={query + idx}
+                value={`${query} ${idx} ${pIdx}`}
               >
                 <div className="flex w-full flex-grow items-baseline justify-between">
                   <span>{track.name}</span>
                   <span className="text-accent-foreground">{track.artist}</span>
                 </div>
               </CommandItem>
-            ))}
+            )),
+          )}
+          {isFetching && (
+            <div className="flex w-full justify-center py-6">
+              <SymbolIcon className="size-6 animate-spin duration-1000" />
+            </div>
+          )}
+          {hasNextPage && !isFetching && (
+            <CommandItem
+              value={query}
+              onSelect={async () => {
+                await fetchNextPage();
+              }}
+            >
+              <Button ref={buttonRef} variant={"ghost"}>
+                More
+              </Button>
+            </CommandItem>
+          )}
         </CommandList>
       </CommandDialog>
     </div>

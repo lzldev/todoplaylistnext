@@ -43,6 +43,9 @@ export const LASTFM_TrackQueryResponseParser = z.union([
   LASTFM_ErrorParser,
   z.object({
     results: z.object({
+      "opensearch:totalResults": z.number({
+        coerce: true,
+      }),
       trackmatches: z.object({
         track: z.array(LASTFM_TrackParser),
       }),
