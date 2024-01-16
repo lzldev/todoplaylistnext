@@ -10,7 +10,7 @@ export const trackRouter = createTRPCRouter({
     .input(
       z.object({
         query: z.string(),
-        page: z.number().default(1),
+        page: z.number().default(0),
       }),
     )
     .query(async ({ input }) => {

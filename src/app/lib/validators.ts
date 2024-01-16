@@ -5,19 +5,16 @@ export const LASTFM_ImageParser = z.object({
   "#text": z.string(),
 });
 
+export const LASTFM_ErrorParser = z.object({
+  error: z.number({ coerce: true }),
+  message: z.string(),
+});
+
 export const LASTFM_TrackParser = z.object({
   name: z.string(),
   artist: z.string(),
   url: z.string(),
   image: z.array(LASTFM_ImageParser),
-});
-
-export const LASTFM_TrackQueryResponseParser = z.object({
-  results: z.object({
-    trackmatches: z.object({
-      track: z.array(LASTFM_TrackParser),
-    }),
-  }),
 });
 
 export const LASTFM_UserParser = z.object({
@@ -42,14 +39,20 @@ export const LASTFM_UserParser = z.object({
   // type: z.string(),
 });
 
-export const LASTFM_UserInfoQueryResponseParser = z.object({
-  user: LASTFM_UserParser,
+export const LASTFM_TrackQueryResponseParser = z.object({
+  results: z.object({
+    trackmatches: z.object({
+      track: z.array(LASTFM_TrackParser),
+    }),
+  }),
 });
 
-export const LASTFM_ErrorParser = z.object({
-  error: z.number({ coerce: true }),
-  message: z.string(),
-});
+export const LASTFM_UserInfoQueryResponseParser = z.union([
+  z.object({
+    user: LASTFM_UserParser,
+  }),
+  LASTFM_ErrorParser,
+]);
 
 export type LASTFM_Error = z.infer<typeof LASTFM_ErrorParser>;
 

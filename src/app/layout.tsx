@@ -1,15 +1,12 @@
 import "~/styles/globals.css";
 
-import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
+import { GeistSans } from "geist/font/sans";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { ClientGlobal } from "./_components/ClientGlobal";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+const font = GeistSans;
 
 export const metadata = {
   title: "Todo Playlist LASTFM",
@@ -23,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className={`font-sans ${inter.variable}`}>
+    <html lang="en" className={`${font.className} dark font-sans antialiased`}>
+      <body>
         <TRPCReactProvider cookies={cookies().toString()}>
           <main className="flex min-h-screen flex-col">{children}</main>
         </TRPCReactProvider>

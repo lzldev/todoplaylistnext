@@ -16,7 +16,6 @@ import { Button } from "./ui/components/ui/button";
 import { useConfigStore } from "../_stores/ConfigStore";
 import { api } from "~/trpc/react";
 import Image from "next/image";
-import { toast } from "sonner";
 
 export type ActionButtonsProps = {
   vertical?: boolean;
@@ -37,14 +36,18 @@ export const ActionButtons = ({ vertical }: ActionButtonsProps) => {
           icon={"fluent:settings-16-filled"}
         />
       </OptionsDialog>
-      <Icon
-        className="fill-foreground size-8"
-        icon={"fluent:arrow-sync-16-filled"}
-      />
-      <Icon
-        className="fill-foreground size-8"
-        icon={"material-symbols:delete"}
-      />
+      <button>
+        <Icon
+          className="fill-foreground size-8"
+          icon={"fluent:arrow-sync-16-filled"}
+        />
+      </button>
+      <button>
+        <Icon
+          className="fill-foreground size-8"
+          icon={"material-symbols:delete"}
+        />
+      </button>
     </div>
   );
 };
