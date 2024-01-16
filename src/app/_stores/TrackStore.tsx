@@ -2,6 +2,7 @@ import type { LASTFM_Track } from "../../server/lib/validators";
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { SuperJSONStorage } from "../lib/zustand";
 
 export type TodoTrack = LASTFM_Track & {
   create_at: Date;
@@ -41,6 +42,7 @@ const useTrackStore = create<TrackStore>()(
       partialize: (s) => ({
         tracks: s.tracks,
       }),
+      storage: SuperJSONStorage,
     },
   ),
 );
