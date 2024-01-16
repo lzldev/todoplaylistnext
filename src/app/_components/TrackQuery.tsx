@@ -69,7 +69,7 @@ export const TrackQuery = () => {
           }}
         />
         <CommandList>
-          {data?.pages.flatMap((page, pIdx, arr) =>
+          {data?.pages.flatMap((page, pIdx) =>
             page.tracks.map((track, idx) => (
               <CommandItem
                 key={`${track.url}`}

@@ -1,11 +1,11 @@
 import type { LASTFM_Track } from "../../server/lib/validators";
 
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 import { SuperJSONStorage } from "../lib/zustand";
 
 export type TodoTrack = LASTFM_Track & {
-  create_at: Date;
+  created_at: Date;
   scrobbled_at: Date | null;
 };
 
@@ -24,26 +24,29 @@ export interface TrackStore {
 }
 
 const useTrackStore = create<TrackStore>()(
-  persist(
-    (set) => ({
-      tracks: [],
-      lastSync: null,
-      addTrack: (track: LASTFM_Track) =>
-        set((state) => ({
-          tracks: [
-            { ...track, create_at: new Date(), scrobbled_at: null },
-            ...state.tracks,
-          ],
-        })),
-      set,
-    }),
-    {
-      name: "TrackStore",
-      partialize: (s) => ({
-        tracks: s.tracks,
+  devtools(
+    persist(
+      (set) => ({
+        tracks: [],
+        lastSync: null,
+        addTrack: (track: LASTFM_Track) =>
+          set((state) => ({
+            tracks: [
+              { ...track, created_at: new Date(), scrobbled_at: null },
+              ...state.tracks,
+            ],
+          })),
+        set,
       }),
-      storage: SuperJSONStorage,
-    },
+      {
+        name: "TrackStore",
+        partialize: (s) => ({
+          tracks: s.tracks,
+          lastSync: s.lastSync,
+        }),
+        storage: SuperJSONStorage,
+      },
+    ),
   ),
 );
 

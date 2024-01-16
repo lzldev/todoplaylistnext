@@ -21,7 +21,7 @@ export const trackRouter = createTRPCRouter({
         });
       });
 
-      const data: unknown = await req.json().catch((e) => {
+      const data: unknown = await req.json().catch(() => {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
         });

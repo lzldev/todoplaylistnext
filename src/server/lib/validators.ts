@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { fromUnixTime } from "date-fns";
 
 export const LASTFM_ImageParser = z.object({
   size: z.string(),
@@ -53,6 +54,48 @@ export const LASTFM_TrackQueryResponseParser = z.union([
   }),
 ]);
 
+const LASTFM_BaseRecentTrack = z.object({
+  name: z.string(),
+  url: z.string(),
+});
+
+const LASTFM_RecentTrack = LASTFM_BaseRecentTrack.and(
+  z.object({
+    date: z
+      .object({
+        uts: z.number({
+          coerce: true,
+        }),
+        "#text": z.string(),
+      })
+      .transform((d) => fromUnixTime(d.uts)),
+  }),
+);
+
+const LASTFM_NowPlayingTrack = LASTFM_BaseRecentTrack.and(
+  z.object({
+    "@attr": z.object({
+      nowplaying: z.boolean({ coerce: true }),
+    }),
+  }),
+);
+
+export const LASTFM_RecentTracksQueryResponseParser = z.union([
+  // LASTFM_UserParser
+  z.object({
+    recenttracks: z.object({
+      track: z
+        .array(z.union([LASTFM_NowPlayingTrack, LASTFM_RecentTrack]))
+        .transform((arr) =>
+          arr.filter(
+            (track): track is LASTFM_RecentTrack => !("@attr" in track),
+          ),
+        ),
+    }),
+  }),
+  LASTFM_ErrorParser,
+]);
+
 export const LASTFM_UserInfoQueryResponseParser = z.union([
   z.object({
     user: LASTFM_UserParser,
@@ -62,11 +105,17 @@ export const LASTFM_UserInfoQueryResponseParser = z.union([
 
 export type LASTFM_User = z.infer<typeof LASTFM_UserParser>;
 export type LASTFM_Track = z.infer<typeof LASTFM_TrackParser>;
+export type LASTFM_RecentTrack = z.infer<typeof LASTFM_RecentTrack>;
+export type LASTFM_NowPlayingTrack = z.infer<typeof LASTFM_NowPlayingTrack>;
+
 export type LASTFM_Image = z.infer<typeof LASTFM_ImageParser>;
 export type LASTFM_Error = z.infer<typeof LASTFM_ErrorParser>;
 
 export type LASTFM_UserInfoQueryResponse = z.infer<
   typeof LASTFM_UserInfoQueryResponseParser
+>;
+export type LASTFM_RecentTracksQueryResponse = z.infer<
+  typeof LASTFM_RecentTracksQueryResponseParser
 >;
 export type LASTFM_TrackQueryResponse = z.infer<
   typeof LASTFM_TrackQueryResponseParser

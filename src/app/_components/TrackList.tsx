@@ -8,9 +8,9 @@ const TrackList = () => {
 
   return (
     <>
-      {tracks.map((track, idx) => (
+      {tracks.map((track) => (
         <div
-          key={idx}
+          key={`${track.name} ${track.created_at.getTime()}`}
           tabIndex={0}
           className="flex justify-between gap-x-4 p-2 first:mt-2"
           role="article"
@@ -29,9 +29,20 @@ const TrackList = () => {
               <span>{track.name}</span>
               <span className="text-accent-foreground">{track.artist}</span>
             </div>
-            <div className="flex flex-row-reverse">
-              <span className="text-sm tracking-tight text-muted-foreground">
-                added {track.create_at instanceof Date ? "true" : "false"}
+            <div className="flex justify-between font-mono text-sm tracking-tighter">
+              <span className="text-red-400">
+                {
+                  //:)
+                }
+                {track.scrobbled_at &&
+                  (track.scrobbled_at instanceof Date
+                    ? track.scrobbled_at.getTime()
+                    : "oopsie ;c")}
+              </span>
+              <span className="text-muted-foreground">
+                {track.created_at instanceof Date
+                  ? track.created_at.getTime()
+                  : "oopsie"}
               </span>
             </div>
           </div>

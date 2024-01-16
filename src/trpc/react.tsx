@@ -20,7 +20,7 @@ export function TRPCReactProvider(props: {
       new QueryClient({
         defaultOptions: {
           mutations: {
-            onError(error, variables, context) {
+            onError(error, _variables, _context) {
               if (
                 error &&
                 typeof error === "object" &&

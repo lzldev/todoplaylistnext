@@ -14,8 +14,7 @@ export const LASTFM_API_TrackQueryURL = (track: string, page: number) =>
 export const LASTFM_API_GetUserInfo = (user: string) =>
   `https://ws.audioscrobbler.com/2.0/${defaults}${encode({ method: "user.getinfo", user })}`;
 
-export const LASTFM_API_GetRecentTracks = (
-  user: string,
-  untilTimeUtc: number,
-) =>
-  `https://ws.audioscrobbler.com/2.0/${defaults}${encode({ method: "user.getrecenttracks", user, to: untilTimeUtc })}`;
+//Max limit
+export const LASTFM_RecentTracks_LIMIT = 200;
+export const LASTFM_API_GetRecentTracks = (params: { user: string }) =>
+  `https://ws.audioscrobbler.com/2.0/${defaults}${encode({ method: "user.getrecenttracks", user: params.user, limit: LASTFM_RecentTracks_LIMIT })}`;
