@@ -30,6 +30,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "./ui/components/ui/alert-dialog";
+import { Separator } from "./ui/components/ui/separator";
 
 export type ActionButtonsProps = {
   vertical?: boolean;
@@ -51,10 +52,7 @@ export const ActionButtons = ({ vertical }: ActionButtonsProps) => {
     >
       <OptionsDialog>
         <Button variant={"ghost"}>
-          <Icon
-            className="size-8 fill-foreground"
-            icon={"fluent:settings-16-filled"}
-          />
+          <Icon className="size-8 fill-foreground" icon={"radix-icons:gear"} />
         </Button>
       </OptionsDialog>
       <Button
@@ -116,19 +114,14 @@ export const ActionButtons = ({ vertical }: ActionButtonsProps) => {
           }
 
           trackStore.set({ tracks: todoTracks, lastSync: currentSync });
+          toast("Synced");
         }}
       >
-        <Icon
-          className="size-8 fill-foreground"
-          icon={"fluent:arrow-sync-16-filled"}
-        />
+        <Icon className="size-8 fill-foreground" icon={"radix-icons:update"} />
       </Button>
       <ClearDialog>
         <Button variant={"ghost"}>
-          <Icon
-            className="size-8 fill-foreground"
-            icon={"material-symbols:delete"}
-          />
+          <Icon className="size-8 fill-foreground" icon={"radix-icons:trash"} />
         </Button>
       </ClearDialog>
     </div>
@@ -152,18 +145,20 @@ const ClearDialog = (props: ClearDialog) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button
-            variant={"destructive"}
-            onClick={() => {
-              const copy = trackStore.tracks
-                .slice(0)
-                .filter((v) => !v.scrobbled_at);
+          <AlertDialogAction asChild>
+            <Button
+              variant={"destructive"}
+              onClick={() => {
+                const copy = trackStore.tracks
+                  .slice(0)
+                  .filter((v) => !v.scrobbled_at);
 
-              trackStore.set({ tracks: copy });
-            }}
-          >
-            Clear
-          </Button>
+                trackStore.set({ tracks: copy });
+              }}
+            >
+              Clear
+            </Button>
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -174,6 +169,8 @@ type OptionsDialogProps = PropsWithChildren;
 
 const OptionsDialog = (props: OptionsDialogProps) => {
   const { user, setUser } = useConfigStore();
+
+  const setTrackStore = useTrackStore((s) => s.set);
 
   const [localUsername, setLocalUsername] = useState(user?.name ?? "");
 

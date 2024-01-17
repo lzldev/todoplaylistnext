@@ -3,6 +3,7 @@ import type { LASTFM_Track } from "../../server/lib/validators";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { SuperJSONStorage } from "../lib/zustand";
+import { toast } from "sonner";
 
 export type TodoTrack = LASTFM_Track & {
   created_at: Date;
@@ -13,6 +14,8 @@ export interface TrackStore {
   tracks: TodoTrack[];
   lastSync: Date | null;
   addTrack: (track: LASTFM_Track) => void;
+  scrobbleTrack: (idx: number) => void;
+  clearTrack: (idx: number) => void;
   //TODO:?
   set: (
     partial:
@@ -26,7 +29,7 @@ export interface TrackStore {
 const useTrackStore = create<TrackStore>()(
   devtools(
     persist(
-      (set) => ({
+      (set, get) => ({
         tracks: [],
         lastSync: null,
         addTrack: (track: LASTFM_Track) =>
@@ -36,6 +39,23 @@ const useTrackStore = create<TrackStore>()(
               ...state.tracks,
             ],
           })),
+        clearTrack: (idx) => {
+          const t = get().tracks;
+          t.splice(idx, 1);
+          set({ tracks: t });
+        },
+        scrobbleTrack: (idx) => {
+          const t = get().tracks;
+          const t2 = t.at(idx);
+          if (!t2) {
+            toast.error("error trying to scrobble the track");
+            return;
+          }
+
+          t2.scrobbled_at = new Date();
+
+          set({ tracks: t });
+        },
         set,
       }),
       {
