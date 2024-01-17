@@ -155,7 +155,7 @@ const ClearDialog = (props: ClearDialog) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Warning</AlertDialogTitle>
           <AlertDialogDescription>
-            This will clea all the scrobbled tracks from your playlist.
+            This will clear all the scrobbled tracks from your playlist.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
