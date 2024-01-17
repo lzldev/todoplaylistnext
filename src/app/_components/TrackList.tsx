@@ -77,49 +77,47 @@ const TrackList = () => {
               </Link>
               <span className="text-accent-foreground">{track.artist}</span>
             </div>
-            <div className="flex justify-between font-mono text-sm tracking-tighter">
-              <span>
-                <div className="flex items-end gap-x-4">
+            <div className="flex items-center justify-between font-mono text-sm tracking-tighter">
+              <div className="flex gap-x-4">
+                <div
+                  className="group/scrobble flex select-none items-center justify-center overflow-clip bg-background md:hidden"
+                  onClick={() => clearTrack(idx)}
+                >
+                  <Icon
+                    icon={"radix-icons:trash"}
+                    className="z-10 size-6 bg-background"
+                  />
+                </div>
+                {
+                  //:)
+                }
+                {track.scrobbled_at ? (
+                  <span className="self-end font-mono text-red-400">
+                    {track.scrobbled_at instanceof Date
+                      ? track.scrobbled_at.getTime()
+                      : "ooopsie ;c"}
+                  </span>
+                ) : (
                   <div
                     className="group/scrobble flex select-none items-center justify-center overflow-clip bg-background md:hidden"
-                    onClick={() => clearTrack(idx)}
+                    onClick={() => {
+                      if (track.scrobbled_at) {
+                        return;
+                      }
+                      scrobbleTrack(idx);
+                    }}
                   >
                     <Icon
-                      icon={"radix-icons:trash"}
+                      icon={"radix-icons:play"}
                       className="z-10 size-6 bg-background"
                     />
                   </div>
-                  {
-                    //:)
-                  }
-                  {track.scrobbled_at ? (
-                    <span className="font-mono text-red-400">
-                      {track.scrobbled_at instanceof Date
-                        ? track.scrobbled_at.getTime()
-                        : "ooopsie ;c"}
-                    </span>
-                  ) : (
-                    <div
-                      className="group/scrobble flex select-none items-center justify-center overflow-clip bg-background md:hidden"
-                      onClick={() => {
-                        if (track.scrobbled_at) {
-                          return;
-                        }
-                        scrobbleTrack(idx);
-                      }}
-                    >
-                      <Icon
-                        icon={"radix-icons:play"}
-                        className="z-10 size-6 bg-background"
-                      />
-                    </div>
-                  )}
-                  {
-                    //:)
-                  }
-                </div>
-              </span>
-              <span className="text-muted-foreground">
+                )}
+                {
+                  //:)
+                }
+              </div>
+              <span className="self-end text-muted-foreground">
                 {track.created_at instanceof Date
                   ? track.created_at.getTime()
                   : "oopsie"}
