@@ -30,7 +30,6 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "./ui/components/ui/alert-dialog";
-import { Separator } from "./ui/components/ui/separator";
 
 export type ActionButtonsProps = {
   vertical?: boolean;
@@ -41,6 +40,8 @@ export const ActionButtons = ({ vertical }: ActionButtonsProps) => {
   const configStore = useConfigStore();
 
   const syncMutate = api.user.recentTracks.useMutation();
+
+  const [syncing, setSyncing] = useState(false);
 
   return (
     <div
@@ -58,6 +59,10 @@ export const ActionButtons = ({ vertical }: ActionButtonsProps) => {
       <Button
         variant={"ghost"}
         onClick={async () => {
+          if (syncing) {
+            return;
+          }
+
           //TODO:Extract into a hook.
           if (configStore.user === null) {
             toast.error("Last.fm user not set.");
@@ -66,6 +71,8 @@ export const ActionButtons = ({ vertical }: ActionButtonsProps) => {
             toast.error("No tracks to Sync.");
             return;
           }
+
+          setSyncing(true);
 
           const currentSync = new Date();
 
@@ -83,10 +90,14 @@ export const ActionButtons = ({ vertical }: ActionButtonsProps) => {
           if (unsyncedIdx === 0) {
             toast("todo list up to date ^-^");
             trackStore.set({ lastSync: currentSync });
+            setSyncing(false);
+
             return;
           } else if (unsyncedIdx === -1) {
             toast("no new scrobbles.");
             trackStore.set({ lastSync: currentSync });
+
+            setSyncing(false);
             return;
           }
 
@@ -114,10 +125,14 @@ export const ActionButtons = ({ vertical }: ActionButtonsProps) => {
           }
 
           trackStore.set({ tracks: todoTracks, lastSync: currentSync });
+          setSyncing(false);
           toast("Synced");
         }}
       >
-        <Icon className="size-8 fill-foreground" icon={"radix-icons:update"} />
+        <Icon
+          className={clsx("size-8 text-foreground", syncing && "animate-spin")}
+          icon={"radix-icons:update"}
+        />
       </Button>
       <ClearDialog>
         <Button variant={"ghost"}>
@@ -169,8 +184,6 @@ type OptionsDialogProps = PropsWithChildren;
 
 const OptionsDialog = (props: OptionsDialogProps) => {
   const { user, setUser } = useConfigStore();
-
-  const setTrackStore = useTrackStore((s) => s.set);
 
   const [localUsername, setLocalUsername] = useState(user?.name ?? "");
 
