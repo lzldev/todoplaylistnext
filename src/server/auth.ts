@@ -4,7 +4,9 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
+import SpotifyProvider, {
+  type SpotifyProfile,
+} from "next-auth/providers/spotify";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -38,7 +40,7 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
+    session: ({ session, user, token }) => ({
       ...session,
       user: {
         ...session.user,
@@ -46,11 +48,31 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
+  logger: {
+    debug: console.log,
+    warn: console.log,
+    error: console.error,
+  },
+  theme: {
+    colorScheme: "dark",
+  },
   adapter: DrizzleAdapter(db, mysqlTable),
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+    SpotifyProvider({
+      clientId: env.SPOTIFY_CLIENT_ID,
+      clientSecret: env.SPOTIFY_CLIENT_SECRET,
+      authorization:
+        "https://accounts.spotify.com/authorize?scope=user-read-email playlist-modify-private playlist-modify-public user-read-recently-played playlist-read-private",
+      profile: async (profile) => {
+        const p = profile as SpotifyProfile;
+
+        return {
+          name: p.display_name,
+          image: p.images.at(0)?.url,
+          email: p.email,
+          id: p.id,
+        };
+      },
     }),
     /**
      * ...add more providers here.
