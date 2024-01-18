@@ -20,6 +20,22 @@ const config = {
         port: "",
         pathname: "/i/u/*/**",
       },
+      {
+        protocol: "https",
+        hostname: "i.scdn.co",
+      },
+      {
+        protocol: "https",
+        hostname: "image-cdn-*.spotifycdn.com",
+      },
+      {
+        protocol: "https",
+        hostname: "wrapped-images.spotifycdn.com",
+      },
+      {
+        protocol: "https",
+        hostname: "mosaic.scdn.co",
+      },
     ],
   },
 };

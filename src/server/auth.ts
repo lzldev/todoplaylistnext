@@ -48,6 +48,14 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
+  logger: {
+    debug: console.log,
+    warn: console.log,
+    error: console.error,
+  },
+  theme: {
+    colorScheme: "dark",
+  },
   adapter: DrizzleAdapter(db, mysqlTable),
   providers: [
     SpotifyProvider({
