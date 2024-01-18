@@ -115,8 +115,12 @@ export const spt_get_playlist_details_response_parser = z.object({
   id: z.string(),
   name: z.string(),
   images: z.array(spt_image),
+  snapshot_id: z.string(),
   type: z.string(),
   uri: z.string(),
+  tracks: z.object({
+    total: z.number(),
+  }),
 });
 
 export const spt_get_recent_tracks_response_parser = z.object({
@@ -155,6 +159,7 @@ export const spt_get_recent_tracks_response_parser = z.object({
   ),
 });
 export type spt_track = z.infer<typeof spt_track>;
+export type spt_playlist_track = z.infer<typeof spt_playlist_track>;
 export type spt_simplified_playlist = z.infer<typeof spt_simplified_playlist>;
 export type spt_image = z.infer<typeof spt_image>;
 

@@ -18,7 +18,7 @@ export const Playlists = (props: { playlists: spt_simplified_playlist[] }) => {
           )}
           {item.images?.at(0)?.url && (
             <Image
-              className="size-16"
+              className="size-16 object-cover"
               src={item.images?.at(0)?.url}
               width={item.images?.at(0)?.width ?? 100}
               height={item.images?.at(0)?.height ?? 100}

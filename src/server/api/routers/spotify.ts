@@ -199,7 +199,7 @@ export const spotifyRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }) => {
       const request = await sptFetchWrapper(
-        `https://api.spotify.com/v1/playlists/${input.playlist_id}`,
+        `https://api.spotify.com/v1/playlists/${input.playlist_id}?${encode({ fields: `id,name,images,snapshot_id,type,uri,tracks(total)` })}`,
         {
           headers: spotifyUserHeaders(ctx.session.spotify.access_token!),
         },
@@ -231,7 +231,6 @@ export const spotifyRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       const uri = `https://api.spotify.com/v1/me/player/recently-played?${encode({ limit: 50 })}&${input.before ? encode({ before: input.before }) : ""}`;
-      console.log(uri);
       const request = await sptFetchWrapper(uri, {
         headers: spotifyUserHeaders(ctx.session.spotify.access_token!),
       }).catch(() => {
@@ -256,6 +255,43 @@ export const spotifyRouter = createTRPCRouter({
       const parsed = spt_get_recent_tracks_response_parser.parse(data);
 
       return parsed;
+    }),
+
+  delete_tracks: spotify_secureProcedure
+    .input(
+      z.object({
+        playlist_id: z.string(),
+        tracks: z.array(z.object({ uri: z.string() })),
+        snapshot_id: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const uri = `https://api.spotify.com/v1/playlists/${input.playlist_id}/tracks`;
+      console.log(uri);
+      const request = await sptFetchWrapper(uri, {
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json",
+          ...spotifyUserHeaders(ctx.session.spotify.access_token!),
+        },
+        body: JSON.stringify({
+          tracks: input.tracks,
+          snapshot_id: input.snapshot_id,
+        }),
+      }).catch(() => {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      });
+
+      if (!request.ok) {
+        console.error("error", await request.json());
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+
+      return true;
     }),
 });
 
