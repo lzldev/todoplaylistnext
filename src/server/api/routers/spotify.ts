@@ -132,7 +132,7 @@ export const spotifyRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input, ctx }) => {
-      const request = await fetch(
+      const request = await sptFetchWrapper(
         "https://api.spotify.com/v1/me/playlists?" +
           encode({
             limit: PLAYLISTS_LIMIT,
@@ -168,7 +168,7 @@ export const spotifyRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input, ctx }) => {
-      const request = await fetch(
+      const request = await sptFetchWrapper(
         `https://api.spotify.com/v1/playlists/${input.playlist_id}/tracks?${encode({ offset: input.offset })}`,
         {
           headers: spotifyUserHeaders(ctx.session.spotify.access_token!),
