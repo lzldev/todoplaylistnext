@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Playlists, PlaylistsSkeleton } from "../Playlists";
 import { Suspense } from "react";
 import type { PageProps } from ".next/types/app/spotify/playlists/[id]/page";
+import { SpotifyLogoutButton } from "~/app/_components/SpotifyLoginButton";
 
 export default async function Home(props: PageProps) {
   const session = await getServerAuthSession();
@@ -30,9 +31,7 @@ export default async function Home(props: PageProps) {
           </div>
           <div className="flex flex-col gap-y-4">
             <span className="text-end">{session.user.name}</span>
-            <Link href={"/api/auth/signout"}>
-              <Button>Logout</Button>
-            </Link>
+            <SpotifyLogoutButton />
           </div>
         </div>
         <Suspense fallback={<PlaylistsSkeleton />}>

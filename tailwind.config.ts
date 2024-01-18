@@ -35,6 +35,10 @@ const config = {
     },
     extend: {
       colors: {
+        spotify: {
+          green: "#1DB954",
+          white: "#ffffff",
+        },
         dark: {
           DEFAULT: customColors["pink-swan"]["400"],
           highlight: customColors["pink-swan"]["300"],
