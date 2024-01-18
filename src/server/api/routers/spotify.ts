@@ -121,7 +121,7 @@ const spotifyUserHeaders = (access_token: string) => ({
   Authorization: `${TOKEN_PRE}${access_token}`,
 });
 
-const PLAYLISTS_LIMIT = 10;
+export const PLAYLISTS_PAGE_SIZE = 9;
 //https://api.spotify.com/v1/me/playlists
 
 export const spotifyRouter = createTRPCRouter({
@@ -135,8 +135,13 @@ export const spotifyRouter = createTRPCRouter({
       const request = await sptFetchWrapper(
         "https://api.spotify.com/v1/me/playlists?" +
           encode({
-            limit: PLAYLISTS_LIMIT,
-            offset: PLAYLISTS_LIMIT * input.page,
+            limit: PLAYLISTS_PAGE_SIZE,
+            offset: PLAYLISTS_PAGE_SIZE * input.page,
+          }) +
+          "&" +
+          encode({
+            fields:
+              "href,limit,next,offset,previous,total,items(id,href,images,name,description)",
           }),
         {
           headers: spotifyUserHeaders(ctx.session.spotify.access_token!),
@@ -267,7 +272,6 @@ export const spotifyRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       const uri = `https://api.spotify.com/v1/playlists/${input.playlist_id}/tracks`;
-      console.log(uri);
       const request = await sptFetchWrapper(uri, {
         method: "DELETE",
         headers: {

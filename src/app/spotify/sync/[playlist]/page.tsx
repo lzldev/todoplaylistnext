@@ -1,13 +1,9 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { api } from "~/trpc/server";
-import { SyncPlaylist, SyncPlaylistProps } from "./SyncPlaylist";
+import { SyncPlaylist, type SyncPlaylistProps } from "./SyncPlaylist";
 import { getServerAuthSession } from "~/server/auth";
-import {
-  spt_get_playlist_details_reponse,
-  spt_get_playlist_items_response,
-  spt_get_recent_tracks_response,
-} from "~/server/lib/spotify";
+import { type spt_get_playlist_items_response } from "~/server/lib/spotify";
 import { Suspense } from "react";
 import { Separator } from "~/app/_components/ui/components/ui/separator";
 import { Skeleton } from "~/app/_components/ui/components/ui/skeleton";
@@ -85,9 +81,6 @@ const SyncSkeleton = async ({
   details: SyncPlaylistProps["details"];
 }) => {
   const n = Math.ceil(details.tracks.total / 100);
-  console.log("total", details.tracks.total);
-  console.log(details.tracks.total / 100);
-  console.log("fetches :", n);
 
   const items = await (async () => {
     const fetches: PromiseSettledResult<spt_get_playlist_items_response>[] =

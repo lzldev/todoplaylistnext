@@ -53,7 +53,6 @@ export const SyncPlaylist = ({ playlist, details }: SyncPlaylistProps) => {
             setIsLoading(true);
             const diffMap = await (async () => {
               const tracks = await recent_tracks.mutateAsync({});
-              console.log("Tracks ->", tracks.items);
               const map = new Map<
                 string,
                 spt_get_recent_tracks_response["items"][number]
@@ -170,7 +169,6 @@ const CommitDialog = ({
                     uri: t.track.uri,
                   })),
                 });
-                console.log(res);
 
                 router.refresh();
                 return;
