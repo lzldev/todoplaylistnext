@@ -8,7 +8,7 @@ export default async function Home() {
   const session = await getServerAuthSession();
 
   if (session) {
-    return redirect("/spotify/playlists");
+    return redirect("spotify/playlists/0");
   }
 
   return (

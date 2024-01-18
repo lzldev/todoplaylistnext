@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function playlists() {
-  return redirect("./0");
+  return redirect("/spotify/playlists/0");
 }

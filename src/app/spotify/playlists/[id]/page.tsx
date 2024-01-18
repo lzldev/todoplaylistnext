@@ -5,8 +5,8 @@ import { getServerAuthSession } from "~/server/auth";
 import { Button } from "../../../_components/ui/components/ui/button";
 import Image from "next/image";
 import { Playlists, PlaylistsSkeleton } from "../Playlists";
-import type { PageProps } from ".next/types/app/spotify/sync/[playlist]/page";
 import { Suspense } from "react";
+import type { PageProps } from ".next/types/app/spotify/playlists/[id]/page";
 
 export default async function Home(props: PageProps) {
   const session = await getServerAuthSession();
