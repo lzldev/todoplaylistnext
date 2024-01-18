@@ -7,7 +7,7 @@ import { Button } from "./ui/components/ui/button";
 export const SpotifyLogginButton = () => {
   return (
     <div
-      className="bg-spotify-green text-spotify-white flex w-fit flex-row items-center rounded-full px-4 py-1 font-bold"
+      className="bg-spotify-green text-spotify-white ring-spotify-white flex w-fit cursor-pointer select-none flex-row items-center rounded-full px-4 py-1 font-bold transition-all duration-150 hover:ring-2"
       onClick={() =>
         signIn("spotify", {
           redirect: false,
@@ -15,7 +15,7 @@ export const SpotifyLogginButton = () => {
       }
     >
       <Icon icon="mdi:spotify" className="mr-1 size-8" />
-      <span className="">Signin with Spotify</span>
+      <span>Continue with Spotify</span>
     </div>
   );
 };
