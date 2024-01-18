@@ -36,6 +36,10 @@ const config = {
         protocol: "https",
         hostname: "mosaic.scdn.co",
       },
+      {
+        protocol: "https",
+        hostname: "blend-playlist-covers.spotifycdn.com",
+      },
     ],
   },
 };

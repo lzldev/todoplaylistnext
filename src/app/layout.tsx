@@ -23,7 +23,9 @@ export default function RootLayout({
     <html lang="en" className={`${font.className} dark font-sans antialiased`}>
       <body>
         <TRPCReactProvider cookies={cookies().toString()}>
-          <main className="flex min-h-screen flex-col">{children}</main>
+          <main className="flex min-h-screen flex-col overflow-x-clip">
+            {children}
+          </main>
         </TRPCReactProvider>
         <ClientGlobal />
       </body>

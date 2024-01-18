@@ -7,7 +7,7 @@ export const spt_image = z.object({
 });
 
 export const spt_simplified_playlist = z.object({
-  collaborative: z.boolean(),
+  // collaborative: z.boolean(),
   description: z.string(),
   external_url: z.any(),
   //   external_urls: z.object({
@@ -15,8 +15,8 @@ export const spt_simplified_playlist = z.object({
   //   }),
   href: z.string(),
   id: z.string(),
-  images: z.any(),
-  //   images: z.array(spt_image),
+  // images: z.any(),
+  images: z.array(spt_image),
   name: z.string(),
   //   owner: z.object({
   //     external_urls: z.object({
@@ -28,22 +28,22 @@ export const spt_simplified_playlist = z.object({
   //     uri: z.string(),
   //     display_name: z.string(),
   //   }),
-  public: z.boolean(),
-  snapshot_id: z.string(),
-  tracks: z.object({
-    href: z.string(),
-    total: z.number(),
-  }),
-  type: z.string(),
-  uri: z.string(),
+  // public: z.boolean(),
+  // snapshot_id: z.string(),
+  // tracks: z.object({
+  //   href: z.string(),
+  //   total: z.number(),
+  // }),
+  // type: z.string(),
+  // uri: z.string(),
 });
 
 export const spt_current_user_playlist_response_parser = z.object({
   href: z.string(),
   limit: z.number(),
-  next: z.string(),
-  offset: z.number(),
+  next: z.string().nullable(),
   previous: z.string().nullable(),
+  offset: z.number(),
   total: z.number(),
   items: z.array(spt_simplified_playlist),
 });
