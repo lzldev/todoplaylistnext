@@ -13,14 +13,7 @@ import {
   spt_get_recent_tracks_response_parser,
 } from "~/server/lib/spotify";
 
-const TOKEN_PRE = `Bearer `;
-const ttt = {
-  access_token: "BQBLuPRYBQ...BP8stIv5xr-Iwaf4l8eg",
-  token_type: "Bearer",
-  expires_in: 3600,
-  refresh_token: "AQAQfyEFmJJuCvAFh...cG_m-2KTgNDaDMQqjrOa3",
-  scope: "user-read-email user-read-private",
-};
+const BEARER_TOKEN_PREFIX = `Bearer `;
 
 const tokenParser = z.object({
   access_token: z.string(),
@@ -33,7 +26,9 @@ const sptFetchWrapper = async (...args: P) => {
   const c = await fetch(...args);
   if (c.status === 401 && args[1]?.headers) {
     //TODO: Dont worry about it :3
-    const auth = args[1].headers["Authorization"].slice(TOKEN_PRE.length);
+    const auth = args[1].headers["Authorization"].slice(
+      BEARER_TOKEN_PREFIX.length,
+    );
 
     const tk = await db.query.accounts.findFirst({
       where: (accounts, { eq }) => eq(accounts.access_token, auth),
@@ -78,11 +73,14 @@ const sptFetchWrapper = async (...args: P) => {
         access_token: t2.access_token,
       })
       .where(eq(accounts.access_token, auth));
-    const [a1, a2, ...an] = args;
+    const [a1, a2] = args;
 
     return fetch(a1, {
       ...a2,
-      headers: { ...a2.headers, Authorization: TOKEN_PRE + t2.access_token },
+      headers: {
+        ...a2.headers,
+        Authorization: BEARER_TOKEN_PREFIX + t2.access_token,
+      },
     });
   }
   return c;
@@ -118,7 +116,7 @@ export const spotify_secureProcedure = protectedProcedure.use(
 );
 
 const spotifyUserHeaders = (access_token: string) => ({
-  Authorization: `${TOKEN_PRE}${access_token}`,
+  Authorization: `${BEARER_TOKEN_PREFIX}${access_token}`,
 });
 
 export const PLAYLISTS_PAGE_SIZE = 9;

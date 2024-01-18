@@ -1,8 +1,6 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getServerAuthSession } from "~/server/auth";
 import { Separator } from "../_components/ui/components/ui/separator";
-import { Button } from "../_components/ui/components/ui/button";
 import { SpotifyLogginButton } from "../_components/SpotifyLoginButton";
 
 export default async function Home() {

@@ -18,7 +18,6 @@ import {
 import { Separator } from "~/app/_components/ui/components/ui/separator";
 import type {
   spt_get_playlist_details_reponse,
-  spt_get_playlist_items_response,
   spt_get_recent_tracks_response,
   spt_playlist_track,
 } from "~/server/lib/spotify";
@@ -162,7 +161,7 @@ const CommitDialog = ({
             <Button
               variant={"destructive"}
               onClick={async () => {
-                const res = await delete_tracks.mutateAsync({
+                await delete_tracks.mutateAsync({
                   playlist_id,
                   snapshot_id,
                   tracks: tracks_to_be_deleted.map((t) => ({
