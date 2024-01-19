@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getServerAuthSession } from "~/server/auth";
-import Image from "next/image";
 import { SpotifyLogoutButton } from "~/app/_components/SpotifyLoginButton";
 import type { LayoutProps } from ".next/types/app/spotify/playlists/[id]/layout";
 
@@ -18,7 +17,7 @@ export default async function Home(props: LayoutProps) {
       <div className="flex w-full flex-1 flex-grow flex-col border-muted md:max-w-2xl md:border-x-2">
         <div className="flex items-center gap-x-4 p-4 ring ring-muted">
           <div className="size-16">
-            <Image
+            <img
               className="rounded-full"
               src={session.user.image!}
               alt={`${session.user.name} profile picture`}

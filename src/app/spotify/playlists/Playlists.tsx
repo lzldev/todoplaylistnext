@@ -32,7 +32,7 @@ export const Playlists = async ({ pageParam }: { pageParam: string }) => {
                 </div>
               )}
               {item.images?.at(0)?.url && (
-                <Image
+                <img
                   className="size-16 object-cover"
                   src={item.images?.at(0)!.url}
                   width={item.images?.at(0)?.width ?? 100}

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { api } from "~/trpc/server";
 import { SyncPlaylist, type SyncPlaylistProps } from "./SyncPlaylist";
@@ -32,7 +31,7 @@ export default async function Page({
       <div className="flex w-full flex-1 flex-grow flex-col border-muted md:max-w-2xl md:border-x-2">
         <div className="flex gap-x-4 p-4">
           {details.images?.at(-1)?.url ? (
-            <Image
+            <img
               priority
               className="size-16 object-cover"
               src={details.images?.at(0)!.url}
