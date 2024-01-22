@@ -68,7 +68,7 @@ export const PlaylistsSkeleton = () => {
   return (
     <div className="flex flex-1 flex-col gap-y-2 p-4">
       {new Array(PLAYLISTS_PAGE_SIZE).fill(undefined).map((_, idx) => (
-        <Skeleton key={idx} className="h-16" />
+        <Skeleton key={idx} className="h-[4.5rem]" />
       ))}
       <Skeleton className="mt-auto h-8" />
     </div>
