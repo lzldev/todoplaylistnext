@@ -7,8 +7,11 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { accounts } from "~/server/db/schema";
 import {
+  spt_current_user_playlist_fields_query,
   spt_current_user_playlist_response_parser,
+  spt_get_playlist_details_fields_query,
   spt_get_playlist_details_response_parser,
+  spt_get_playlist_items_fields_query,
   spt_get_playlist_items_response_parser,
   spt_get_recent_tracks_response_parser,
 } from "~/server/lib/spotify";
@@ -138,8 +141,7 @@ export const spotifyRouter = createTRPCRouter({
           }) +
           "&" +
           encode({
-            fields:
-              "href,limit,next,offset,previous,total,items(id,href,images,name,description)",
+            fields: spt_current_user_playlist_fields_query,
           }),
         {
           headers: spotifyUserHeaders(ctx.session.spotify.access_token!),
@@ -172,7 +174,7 @@ export const spotifyRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }) => {
       const request = await sptFetchWrapper(
-        `https://api.spotify.com/v1/playlists/${input.playlist_id}/tracks?${encode({ offset: input.offset })}`,
+        `https://api.spotify.com/v1/playlists/${input.playlist_id}/tracks?${encode({ offset: input.offset, fields: spt_get_playlist_items_fields_query })}`,
         {
           headers: spotifyUserHeaders(ctx.session.spotify.access_token!),
         },
@@ -202,7 +204,7 @@ export const spotifyRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }) => {
       const request = await sptFetchWrapper(
-        `https://api.spotify.com/v1/playlists/${input.playlist_id}?${encode({ fields: `id,name,images,snapshot_id,type,uri,tracks(total)` })}`,
+        `https://api.spotify.com/v1/playlists/${input.playlist_id}?${encode({ fields: spt_get_playlist_details_fields_query })}`,
         {
           headers: spotifyUserHeaders(ctx.session.spotify.access_token!),
         },

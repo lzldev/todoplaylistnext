@@ -1,4 +1,5 @@
-import { z } from "zod";
+import { ZodArray, ZodObject, ZodSchema, z } from "zod";
+import { zodParserIntoFieldsQuery } from "./field_query";
 
 export const spt_image = z.object({
   url: z.string(),
@@ -37,24 +38,13 @@ export const spt_simplified_playlist = z.object({
   // type: z.string(),
   // uri: z.string(),
 });
-
-export const spt_current_user_playlist_response_parser = z.object({
-  href: z.string(),
-  limit: z.number(),
-  next: z.string().nullable(),
-  previous: z.string().nullable(),
-  offset: z.number(),
-  total: z.number(),
-  items: z.array(spt_simplified_playlist),
-});
-
 export const spt_track = z.object({
-  album: z.any(),
-  artists: z.array(z.any()),
-  available_markets: z.array(z.string()),
+  // album: z.any(),
+  // artists: z.array(z.any()),
+  // available_markets: z.array(z.string()),
   disc_number: z.number(),
-  duration_ms: z.number(),
-  explicit: z.boolean(),
+  // duration_ms: z.number(),
+  // explicit: z.boolean(),
   external_ids: z.object({
     isrc: z.string().optional(),
     ean: z.string().optional(),
@@ -65,16 +55,16 @@ export const spt_track = z.object({
   }),
   href: z.string(),
   id: z.string(),
-  is_playable: z.boolean().optional(),
-  linked_from: z.any(),
-  restrictions: z
-    .object({
-      reason: z.string(),
-    })
-    .optional(),
+  // is_playable: z.boolean().optional(),
+  // linked_from: z.any(),
+  // restrictions: z
+  //   .object({
+  //     reason: z.string(),
+  //   })
+  //   .optional(),
   name: z.string(),
-  popularity: z.number(),
-  preview_url: z.string().nullable(),
+  // popularity: z.number(),
+  // preview_url: z.string().nullable(),
   track_number: z.number(),
   type: z.literal("track"),
   uri: z.string(),
@@ -83,7 +73,7 @@ export const spt_track = z.object({
 
 export const spt_playlist_track = z.object({
   added_at: z.string(),
-  added_by: z.any(),
+  // added_by: z.any(),
   //   added_by: z.object({
   //     external_urls: z.object({
   //       spotify: z.string(),
@@ -111,6 +101,9 @@ export const spt_get_playlist_items_response_parser = z.object({
   items: z.array(spt_playlist_track),
 });
 
+
+export const spt_get_playlist_items_fields_query = zodParserIntoFieldsQuery(spt_get_playlist_items_response_parser)
+
 export const spt_get_playlist_details_response_parser = z.object({
   id: z.string(),
   name: z.string(),
@@ -122,6 +115,22 @@ export const spt_get_playlist_details_response_parser = z.object({
     total: z.number(),
   }),
 });
+
+export const spt_get_playlist_details_fields_query =  zodParserIntoFieldsQuery(spt_get_playlist_details_response_parser)
+
+
+export const spt_current_user_playlist_response_parser = z.object({
+  href: z.string(),
+  limit: z.number(),
+  next: z.string().nullable(),
+  previous: z.string().nullable(),
+  offset: z.number(),
+  total: z.number(),
+  items: z.array(spt_simplified_playlist),
+});
+
+export const spt_current_user_playlist_fields_query = zodParserIntoFieldsQuery(spt_current_user_playlist_response_parser)
+
 
 export const spt_get_recent_tracks_response_parser = z.object({
   href: z.string(),
@@ -177,3 +186,4 @@ export type spt_get_playlist_items_response = z.infer<
 export type spt_get_recent_tracks_response = z.infer<
   typeof spt_get_recent_tracks_response_parser
 >;
+

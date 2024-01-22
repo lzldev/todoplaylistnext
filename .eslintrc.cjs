@@ -13,6 +13,7 @@ const config = {
   rules: {
     // These opinionated rules are enabled in stylistic-type-checked above.
     // Feel free to reconfigure them to your own preference.
+    "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/array-type": "off",
     "@typescript-eslint/no-unsafe-argument": 0,
     "@typescript-eslint/no-unsafe-member-access": 0,

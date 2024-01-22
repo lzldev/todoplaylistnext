@@ -32,7 +32,6 @@ export default async function Page({
         <div className="flex gap-x-4 p-4">
           {details.images?.at(-1)?.url ? (
             <img
-              priority
               className="size-16 object-cover"
               src={details.images?.at(0)!.url}
               width={details.images?.at(0)?.width ?? 200}
@@ -84,7 +83,7 @@ const SyncSkeleton = async ({
   const items = await (async () => {
     const fetches: PromiseSettledResult<spt_get_playlist_items_response>[] =
       await Promise.allSettled(
-        new Array(n).fill(undefined).map((v, idx) =>
+        new Array(n).fill(undefined).map((_, idx) =>
           api.spotify.playlist_tracks.query({
             playlist_id: details.id,
             offset: 100 * idx,
