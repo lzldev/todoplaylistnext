@@ -107,7 +107,7 @@ export const spt_get_playlist_items_fields_query = zodParserIntoFieldsQuery(spt_
 export const spt_get_playlist_details_response_parser = z.object({
   id: z.string(),
   name: z.string(),
-  images: z.array(spt_image),
+  images: z.array(spt_image).nullable(),
   snapshot_id: z.string(),
   type: z.string(),
   uri: z.string(),
